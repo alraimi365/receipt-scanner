@@ -3,9 +3,13 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  // Load environment variables
+  await dotenv.load(fileName: ".env");
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -57,7 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // Function to send the image to the API
   Future<void> _sendImageToApi(File image) async {
-    final url = Uri.parse("URL Placeholder");
+    String backendUrl = dotenv.env['BACKEND_URL'] ?? 'http://127.0.0.1:5001';
+    final url = Uri.parse('$backendUrl/upload_receipt');
 
     setState(() {
       _isLoading = true;
